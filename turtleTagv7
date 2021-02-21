@@ -5,10 +5,28 @@ import math
 
 
 #Game Functions
-def drawborder():
+def drawborder(rounds):
+  globrounds = rounds
+  border.clear()
+  border.speed(0)
+  if rounds % 2 == 0:
+   border.color('blue')
+  else:
+    border.color('red')
   for i in range(4):
     border.forward(360)
     border.left(90)
+  
+def powerUpIndicatorB():
+  for num in range(0,5):
+        pwrUpIndBlue.color("white")
+        pwrUpIndBlue.color('blue')
+
+def powerUpIndicatorR():
+  for num in range(0,5):
+        pwrUpIndRed.color("white")
+        pwrUpIndRed.color('red')
+  
 
 
 def p1fd():
@@ -46,22 +64,22 @@ def p2lt():
 def brdrcllsnx(player):
   x1, y1 = player.pos()
   player.up()
-  if player.xcor() < -180:
-    player.setpos(180, y1)
-  elif player.xcor() > 180:
-    player.setpos(-180, y1)
+  if player.xcor() < -170:
+    player.setpos(170, y1)
+  elif player.xcor() > 170:
+    player.setpos(-170, y1)
     
 
 def brdrcllsny(player):
   player.up()
   x, y = player.pos()
-  if player.ycor() < -180:
-    player.setpos(x, 180)
-  elif player.ycor() > 180:
-    player.setpos(x, -180)
+  if player.ycor() < -170:
+    player.setpos(x, 170)
+  elif player.ycor() > 170:
+    player.setpos(x, -170)
     
 def checkP(player):
-  global takeable, pwrUpP1, pwrUpP2
+  global takeable, pwrUpP1, pwrUpP2, tp, length
   if abs(player.xcor() - pwrUp.xcor()) <= 15:
     if abs(player.ycor() - pwrUp.ycor()) <= 15:
       if takeable == True:
@@ -69,42 +87,62 @@ def checkP(player):
           pwrUp.ht()
           pwrUpP1 = True
           takeable = False
-          return takeable, pwrUpP1
+          if tp == 3:
+            tp = 0
+          if length >= 30:
+            length += 15
+          return takeable, pwrUpP1, tp, length
         if player == p2:
           pwrUp.ht()
           pwrUpP2 = True
           takeable = False
-          return takeable, pwrUpP2
+          if tp == 3:
+            tp = 0
+          if length >= 30:
+            length += 15
+          return takeable, pwrUpP2, tp, length
           
 def p2Pwr():
-    global rounds, tp
+    global rounds, tp, pwrUpP2
     if pwrUpP2:
-      if rounds % 2 == 0:
-        if tp < 3:
-          p2.setpos(random.randint(-150, 150), random.randint(-150, 150))
-          tp += 1      
-        
-      else:
+      if rounds % 2 != 0:
         p2.down()
-        
-        if len(theLine) < 60:
+        if len(theLine) < length:
           theLine.append((p2.xcor(), p2.ycor()))
+          powerUpIndicatorR()
         else:
           p2.up()
+          pwrUpP2 = False
+          return pwrUpP2
+      else:
+        if tp < 3:
+          p2.setpos(random.randint(-150, 150), random.randint(-150, 150))
+          tp += 1
+          powerUpIndicatorR()
+        else: 
+          pwrUpP2 = False
+          return pwrUpP2
 
 def p1Pwr():
-    global rounds, tp
+    global rounds, tp, pwrUpP1
     if pwrUpP1:
       if rounds % 2 == 0:
         p1.down()
-        if len(theLine) < 60:
+        if len(theLine) < length:
           theLine.append((p1.xcor(), p1.ycor()))
+          powerUpIndicatorB()
         else:
           p1.up()
+          pwrUpP1 = False
+          return pwrUpP1
       else:
         if tp < 3:
           p1.setpos(random.randint(-150, 150), random.randint(-150, 150))
           tp += 1
+          powerUpIndicatorB()
+        else: 
+          pwrUpP1 = False
+          return pwrUpP1
 
   
 def subtractAndCheck(t1, t2):
@@ -115,6 +153,12 @@ def subtractAndCheck(t1, t2):
   if x3 <= 15:
     if y3 <= 15:
       return True
+      
+def clicked(x,y):
+  print(x)
+  print(y)
+  
+
 
 
       
@@ -129,22 +173,25 @@ screen.setup(600, 600)
 screen.bgcolor((240, 240, 255))
 
 
+
 #Hide unused turtle
 turtle.ht()
 
 
 #Init & draw border
 border = turtle.Turtle()
+border.speed(0)
 border.up()
 border.setpos((-180, -180))
 border.down()
-border.speed(5)
+
 border.width(3)
 
 
 redscore = 0
 bluescore = 0
 indicator = turtle.Turtle()
+indicator.speed(0)
 indicator.up()
 indicator.setpos((-230, 200))
 indicator.ht()
@@ -161,7 +208,7 @@ eraser.up()
 eraser.color((240, 240, 255))
 
 
-drawborder()
+drawborder(1)
 border.ht()
 
 
@@ -174,10 +221,23 @@ red.up()
 blue.color('blue')
 red.up()
 red.color('red')
-red.setpos(-200, 250)
+red.setpos(-165, 250)
 blue.setpos(0, 250)
 red.shape('square')
 blue.shape('square')
+
+pwrUpIndBlue = turtle.Turtle()
+pwrUpIndBlue.up()
+pwrUpIndBlue.speed(0)
+pwrUpIndBlue.setpos(0, -250)
+pwrUpIndBlue.shape('turtle')
+pwrUpIndBlue.color('blue')
+pwrUpIndRed = turtle.Turtle()
+pwrUpIndRed.up()
+pwrUpIndRed.speed(0)
+pwrUpIndRed.setpos(-165, -250)
+pwrUpIndRed.shape('turtle')
+pwrUpIndRed.color('red')
 
     
 #Initialize player 1
@@ -188,7 +248,7 @@ p1.width(3)
 p1.up()
 p1.speed(0)
 p1.right(random.randint(0, 360))
-p1.setpos(random.randint(-150, 150), random.randint(-150, 150))
+p1.setpos(random.randint(-115, 150), random.randint(-150, 150))
 
 
 #Init player 2
@@ -224,7 +284,7 @@ now = time.localtime()
 sec = now.tm_sec
 if sec > 44:
   sec = 1
-print(sec)
+# print(sec)
 
 
 
@@ -240,10 +300,11 @@ pwrUpP1 = False
 pwrUpP2 = False
 theLine = []
 tp = 0
+length = 30
 
 while game:
   
-  
+  screen.onscreenclick(clicked)
   while countdown != 0 and countdown > 0:
     bigWriter.write(str(countdown), False, 'center', font=('Candara', 30, 'bold'))
     countdown -= 1
@@ -273,6 +334,8 @@ while game:
     pwrUpP1 = False
     pwrUpP2 = False
     tp = 0
+    lentgth = 30
+    drawborder(rounds)
   
   if now.tm_sec - sec == 15:
     
