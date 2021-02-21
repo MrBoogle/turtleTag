@@ -8,5 +8,7 @@ Obviously I've moved on to working on better things now, but as of 2018, this ga
 # Controls
 _Player 1_
 Arrow keys for movement, P for power up
+
+
 _Player 2_
 WASD for movement, Spacebar for powerup
