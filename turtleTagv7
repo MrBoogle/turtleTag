@@ -4,6 +4,8 @@ import time
 import math
 
 
+
+
 #Game Functions
 def drawborder(rounds):
   globrounds = rounds
@@ -154,23 +156,129 @@ def subtractAndCheck(t1, t2):
     if y3 <= 15:
       return True
       
-def clicked(x,y):
-  print(x)
-  print(y)
+def flash(posx, posy, text, color1, color2, intrvl, times):
+  for num in range (0,times):
+        screenWriter(posx, posy, text, color1)
+        time.sleep(intrvl)
+        screenWriter(posx, posy, text, color2)
+        bigWriter.setpos(0,0)
+        bigWriter.color("white")
+        
+def mainmenu():
   
+  screenWriter(0, 50, "Start Game", "white")
+  screenWriter(0, 0, "Rules", "white")
+  bigWriter.setpos(0,0)
+
+      
+def clicked(x,y):
+  global game, menu
+  print((x,y))
+  if abs(x) <= 100:
+    if y >= 45 and y <= 80 and menu ==True:
+      game = True
+      menu = False
+      flash(0, 50, "Start Game", "blue", "red", 0.1, 5)
+      
+    
+    
+    elif y >= -5 and menu == True:
+      menu = False
+      flash(0, 0, "Rules", "blue", "red", 0.1, 5)
+      bigWriter.clear()
+      
+      
+      
+      bigWriter.setpos(-290, 260)
+      bigWriter.write("Back", False, 'left', font=('Candara', 20, 'bold'))
+      
+      bigWriter.setpos(0,190)
+      bigWriter.write("-Color of border indicates who is 'it'", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,160)
+      bigWriter.write("This is a 2 player game", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,130)
+      bigWriter.write("-The objective is to 'catch' the other turtle, or player", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,100)
+      bigWriter.write("-There are 4 rounds, 2 rounds with the first player having", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,80)
+      bigWriter.write("to catch the second, and vice versa", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,50)
+      bigWriter.write("-The longer you stay uncaught,", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,30)
+      bigWriter.write("the more points you accumulate.", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,0)
+      bigWriter.write("-Whoever has the most points after", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-20)
+      bigWriter.write("4 rounds wins", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-50)
+      bigWriter.write("-Players can pass through walls", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-80)
+      bigWriter.write("-Orange circles are powerups", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-110)
+      bigWriter.write("-If you are 'it', the powerup", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-130)
+      bigWriter.write("leaves a trail behind you which will trap the player", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-160)
+      bigWriter.write("-Otherwise, you can teleport away from the player", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,-180)
+      bigWriter.write("trying to catch you 3 times", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(-166, -220)
+      bigWriter.write("W", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(-136, -250)
+      bigWriter.write("D", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(-196, -250)
+      bigWriter.write("A", False, 'center', font=('Candara', 15, 'bold'))
+       
+      bigWriter.setpos(0, -220)
+      bigWriter.write("^", False, 'center', font=('Candara', 15, 'bold'))
+      
+      bigWriter.setpos(30, -250)
+      bigWriter.write(">", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(-30, -250)
+      bigWriter.write("<", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(166, -220)
+      bigWriter.write("Power Ups:", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(166, -250)
+      bigWriter.color("red")
+      bigWriter.write("'Space'", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(166, -280)
+      bigWriter.color("blue")
+      bigWriter.write("'P'", False, 'center', font=('Candara', 15, 'bold'))
+      
+  if menu == False and x <= -230 and y >= 220:
+      bigWriter.clear()
+      menu = True
+      game = False
+      mainmenu()
+    
+
+  
+  
+def screenWriter(posx, posy, text, color):
+    bigWriter.setpos(posx,posy)
+    bigWriter.color(color)
+    bigWriter.write(text, False, 'center', font=('Candara', 30, 'bold'))
 
 
 
       
 
-  
-running = True
+
 
 
 #Initialize Screen
 screen = turtle.Screen()
 screen.setup(600, 600)
-screen.bgcolor((240, 240, 255))
+screen.bgcolor((0, 0, 0))
+
+decorator = turtle.Turtle()
+decorator.speed(10)
+decorator.ht()
+decorator.up()
+decorator.setpos(300,300)
+decorator.down()
+decorator.left(180)
+
 
 
 
@@ -202,10 +310,10 @@ bigWriter.up()
 bigWriter.ht()
 
 
-eraser = turtle.Turtle()
-eraser.ht()
-eraser.up()
-eraser.color((240, 240, 255))
+# eraser = turtle.Turtle()
+# eraser.ht()
+# eraser.up()
+# eraser.color((240, 240, 255))
 
 
 drawborder(1)
@@ -232,13 +340,14 @@ pwrUpIndBlue.speed(0)
 pwrUpIndBlue.setpos(0, -250)
 pwrUpIndBlue.shape('turtle')
 pwrUpIndBlue.color('blue')
+pwrUpIndBlue.left(90)
 pwrUpIndRed = turtle.Turtle()
 pwrUpIndRed.up()
 pwrUpIndRed.speed(0)
 pwrUpIndRed.setpos(-165, -250)
 pwrUpIndRed.shape('turtle')
 pwrUpIndRed.color('red')
-
+pwrUpIndRed.left(90)
     
 #Initialize player 1
 p1 = turtle.Turtle()
@@ -293,8 +402,9 @@ rounds = 1
 counter = rounds
 countdown = 5
 
-
-game = True
+menu = True
+waiting = True
+game = False
 takeable = False
 pwrUpP1 = False
 pwrUpP2 = False
@@ -302,14 +412,42 @@ theLine = []
 tp = 0
 length = 30
 
-while game:
+
+mainmenu()
+
+
+while waiting:
+  
+
   
   screen.onscreenclick(clicked)
+  if game == True:
+    time.sleep(3)
+    waiting = False
+    menu = False
+    print(waiting)
+
+
+
+while game:
+  
+
+ 
+  
+  
+  
   while countdown != 0 and countdown > 0:
+    
+    bigWriter.clear()
     bigWriter.write(str(countdown), False, 'center', font=('Candara', 30, 'bold'))
     countdown -= 1
     time.sleep(1)
     bigWriter.clear()
+    if countdown == 0:
+      # bigWriter.setpos(-290, 260)
+      # bigWriter.write("Back", False, 'left', font=('Candara', 20, 'bold'))
+      bigWriter.setpos(0,0)
+        
   
   
   xCoor = abs(p1.xcor() - p2.xcor())
@@ -387,7 +525,7 @@ while game:
           screen.bgcolor('blue')
           p1.color("white")
           time.sleep(0.5)
-          screen.bgcolor('white')
+          screen.bgcolor('black')
           p1.color("blue")
           time.sleep(0.5)
         rounds += 1  
@@ -398,7 +536,7 @@ while game:
           screen.bgcolor('blue')
           p1.color("white")
           time.sleep(0.5)
-          screen.bgcolor('white')
+          screen.bgcolor('black')
           p1.color("blue")
           time.sleep(0.5)
         rounds += 1
@@ -439,7 +577,7 @@ while game:
           screen.bgcolor('red')
           p2.color("white")
           time.sleep(0.5)
-          screen.bgcolor('white')
+          screen.bgcolor('black')
           p2.color("red")
           time.sleep(0.5)
         rounds += 1    
@@ -450,7 +588,7 @@ while game:
           screen.bgcolor('red')
           p2.color("white")
           time.sleep(0.5)
-          screen.bgcolor('white')
+          screen.bgcolor('black')
           p2.color("red")
           time.sleep(0.5)
         rounds += 1
