@@ -23,8 +23,8 @@ def reset():
   p1.setpos(random.randint(-150, 150), random.randint(-150, 150))
   p2.setpos(random.randint(-150, 150), random.randint(-150, 150))
 
-def drawborder():
-  global rounds
+def drawborder(rounds):
+  globrounds = rounds
   border.clear()
   border.speed(0)
   if rounds % 2 == 0:
@@ -74,11 +74,11 @@ def p1bd():
   
 
 def p1rt():
-  p1.right(avgspeed*2)
+  p1.right(avgspeed)
 
 
 def p1lt():
-  p1.left(avgspeed*2)
+  p1.left(avgspeed)
 
 
 def p2fd():
@@ -90,11 +90,11 @@ def p2bd():
   
 
 def p2rt():
-  p2.right(avgspeed*2)
+  p2.right(avgspeed)
 
 
 def p2lt():
-  p2.left(avgspeed*2)
+  p2.left(avgspeed)
 
 
 def brdrcllsnx(player):
@@ -249,10 +249,10 @@ def clicked(x,y):
       bigWriter.setpos(-290, 260)
       bigWriter.write("Back", False, 'left', font=('Candara', 20, 'bold'))
       
-      
-      
-      bigWriter.setpos(0,160)
+      bigWriter.setpos(0,190)
       bigWriter.write("-Color of border indicates who is 'it'", False, 'center', font=('Candara', 15, 'bold'))
+      bigWriter.setpos(0,160)
+      bigWriter.write("This is a 2 player game", False, 'center', font=('Candara', 15, 'bold'))
       bigWriter.setpos(0,130)
       bigWriter.write("-The objective is to 'catch' the other turtle, or player", False, 'center', font=('Candara', 15, 'bold'))
       bigWriter.setpos(0,100)
@@ -326,7 +326,7 @@ def screenWriter(posx, posy, text, color, size):
 #Initialize Screen
 screen = turtle.Screen()
 screen.setup(600, 600)
-screen.bgcolor((0, 0, 0))
+screen.bgcolor((60,174,163))
 
 
 
@@ -366,11 +366,8 @@ bigWriter.ht()
 # eraser.up()
 # eraser.color((240, 240, 255))
 
-rounds = random.randint(1,2)
-startround = rounds
-print(rounds)
 
-drawborder()
+drawborder(1)
 border.ht()
 
 
@@ -440,7 +437,7 @@ blue.write(" " * 20 + str(bluescore), False, 'center', font=('Candara', 18, 'bol
 turtle.up()
 p1speed = 0
 p2speed = 0
-avgspeed = 8
+avgspeed = 10
 
 
 now = time.localtime()
@@ -452,7 +449,7 @@ print(sec)
 
 
 
-
+rounds = 1
 counter = rounds
 countdown = 5
 
@@ -530,7 +527,7 @@ while game:
     pwrUpP2 = False
     tp = 0
     lentgth = 30
-    drawborder()
+    drawborder(rounds)
   
   # if now.tm_sec - sec == 10:
     
@@ -668,14 +665,14 @@ while game:
     
     
     
-    if rounds == startround + 4:
+    if rounds == 5:
       if bluescore > redscore:
         bigWriter.color("blue")
         bigWriter.write("Blue Wins!", False, 'center', font=('Candara', 30, 'bold'))
         game = False
       
     
-    if rounds == startround + 4:
+    if rounds == 5:
       if redscore > bluescore:
         bigWriter.color("red")
         bigWriter.write("Red Wins!", False, 'center', font=('Candara', 30, 'bold'))
@@ -815,14 +812,14 @@ while game:
     
     
     
-    if rounds == startround + 4:
+    if rounds == 5:
       if bluescore > redscore:
         bigWriter.color("blue")
         bigWriter.write("Blue Wins!", False, 'center', font=('Candara', 30, 'bold'))
         game = False
       
     
-    if rounds == startround + 4:
+    if rounds == 5:
       if redscore > bluescore:
         bigWriter.color("red")
         bigWriter.write("Red Wins!", False, 'center', font=('Candara', 30, 'bold'))
