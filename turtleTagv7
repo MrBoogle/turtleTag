@@ -1,0 +1,418 @@
+import turtle
+import random
+import time
+import math
+
+
+#Game Functions
+def drawborder():
+  for i in range(4):
+    border.forward(360)
+    border.left(90)
+
+
+def p1fd():
+  p1.forward(avgspeed)
+
+
+def p1bd():
+  p1.backward(avgspeed)
+  
+
+def p1rt():
+  p1.right(avgspeed)
+
+
+def p1lt():
+  p1.left(avgspeed)
+
+
+def p2fd():
+  p2.forward(avgspeed)
+
+
+def p2bd():
+  p2.backward(avgspeed)
+  
+
+def p2rt():
+  p2.right(avgspeed)
+
+
+def p2lt():
+  p2.left(avgspeed)
+
+
+def brdrcllsnx(player):
+  x1, y1 = player.pos()
+  player.up()
+  if player.xcor() < -180:
+    player.setpos(180, y1)
+  elif player.xcor() > 180:
+    player.setpos(-180, y1)
+    
+
+def brdrcllsny(player):
+  player.up()
+  x, y = player.pos()
+  if player.ycor() < -180:
+    player.setpos(x, 180)
+  elif player.ycor() > 180:
+    player.setpos(x, -180)
+    
+def checkP(player):
+  global takeable, pwrUpP1, pwrUpP2
+  if abs(player.xcor() - pwrUp.xcor()) <= 15:
+    if abs(player.ycor() - pwrUp.ycor()) <= 15:
+      if takeable == True:
+        if player == p1:
+          pwrUp.ht()
+          pwrUpP1 = True
+          takeable = False
+          return takeable, pwrUpP1
+        if player == p2:
+          pwrUp.ht()
+          pwrUpP2 = True
+          takeable = False
+          return takeable, pwrUpP2
+          
+def p2Pwr():
+    global rounds, tp
+    if pwrUpP2:
+      if rounds % 2 == 0:
+        if tp < 3:
+          p2.setpos(random.randint(-150, 150), random.randint(-150, 150))
+          tp += 1      
+        
+      else:
+        p2.down()
+        
+        if len(theLine) < 60:
+          theLine.append((p2.xcor(), p2.ycor()))
+        else:
+          p2.up()
+
+def p1Pwr():
+    global rounds, tp
+    if pwrUpP1:
+      if rounds % 2 == 0:
+        p1.down()
+        if len(theLine) < 60:
+          theLine.append((p1.xcor(), p1.ycor()))
+        else:
+          p1.up()
+      else:
+        if tp < 3:
+          p1.setpos(random.randint(-150, 150), random.randint(-150, 150))
+          tp += 1
+
+  
+def subtractAndCheck(t1, t2):
+  x1, y1 = t1
+  x2, y2 = t2
+  x3 = abs(x1-x2) 
+  y3 = abs(y1-y2)
+  if x3 <= 15:
+    if y3 <= 15:
+      return True
+
+
+      
+
+  
+running = True
+
+
+#Initialize Screen
+screen = turtle.Screen()
+screen.setup(600, 600)
+screen.bgcolor((240, 240, 255))
+
+
+#Hide unused turtle
+turtle.ht()
+
+
+#Init & draw border
+border = turtle.Turtle()
+border.up()
+border.setpos((-180, -180))
+border.down()
+border.speed(5)
+border.width(3)
+
+
+redscore = 0
+bluescore = 0
+indicator = turtle.Turtle()
+indicator.up()
+indicator.setpos((-230, 200))
+indicator.ht()
+
+
+bigWriter = turtle.Turtle()
+bigWriter.up()
+bigWriter.ht()
+
+
+eraser = turtle.Turtle()
+eraser.ht()
+eraser.up()
+eraser.color((240, 240, 255))
+
+
+drawborder()
+border.ht()
+
+
+red = turtle.Turtle()
+blue = turtle.Turtle()
+blue.speed(0)
+red.speed(0)
+blue.up()
+red.up()
+blue.color('blue')
+red.up()
+red.color('red')
+red.setpos(-200, 250)
+blue.setpos(0, 250)
+red.shape('square')
+blue.shape('square')
+
+    
+#Initialize player 1
+p1 = turtle.Turtle()
+p1.shape("turtle")
+p1.color('blue')
+p1.width(3)
+p1.up()
+p1.speed(0)
+p1.right(random.randint(0, 360))
+p1.setpos(random.randint(-150, 150), random.randint(-150, 150))
+
+
+#Init player 2
+p2 = turtle.Turtle()
+p2.shape("turtle")
+p2.color('red')
+p2.width(3)
+p2.up()
+p2.speed(0)
+p2.right(random.randint(0, 360))
+p2.setpos(random.randint(-150, 150), random.randint(-150, 150))
+
+
+#Init PowerUp
+pwrUp = turtle.Turtle()
+pwrUp.ht()
+pwrUp.up()
+pwrUp.shape("circle")
+pwrUp.color("orange")
+pwrUp.speed(0)
+
+red.write(" " * 20 + str(redscore), False, 'center', font=('Candara', 18, 'bold'))
+blue.write(" " * 20 + str(bluescore), False, 'center', font=('Candara', 18, 'bold'))  
+
+
+turtle.up()
+p1speed = 0
+p2speed = 0
+avgspeed = 10
+
+
+now = time.localtime()
+sec = now.tm_sec
+if sec > 44:
+  sec = 1
+print(sec)
+
+
+
+
+rounds = 1
+counter = rounds
+countdown = 5
+
+
+game = True
+takeable = False
+pwrUpP1 = False
+pwrUpP2 = False
+theLine = []
+tp = 0
+
+while game:
+  
+  
+  while countdown != 0 and countdown > 0:
+    bigWriter.write(str(countdown), False, 'center', font=('Candara', 30, 'bold'))
+    countdown -= 1
+    time.sleep(1)
+    bigWriter.clear()
+  
+  
+  xCoor = abs(p1.xcor() - p2.xcor())
+  yCoor = abs(p1.ycor() - p2.ycor())
+  
+  
+  brdrcllsnx(p1)
+  brdrcllsnx(p2)
+  brdrcllsny(p1)
+  brdrcllsny(p2)
+  
+  
+  now = time.localtime()
+  
+  #Resets values for every round
+  if rounds != counter:
+    counter = rounds
+    takeable = True
+    theLine = []
+    p1.clear()
+    p2.clear()
+    pwrUpP1 = False
+    pwrUpP2 = False
+    tp = 0
+  
+  if now.tm_sec - sec == 15:
+    
+    sec = now.tm_sec
+    if sec > 44:
+      sec = 0
+    pwrUp.showturtle()
+    pwrUp.setpos(random.randint(-150, 150), random.randint(-150, 150))
+    takeable = True
+    
+  checkP(p1)
+  checkP(p2)
+ 
+  
+  if rounds % 2 == 0:
+    
+    
+    #Round 1
+
+      
+    #Player 1 controls
+    screen.onkey(p1fd, "Up")
+    screen.onkey(p1bd, "Down")
+    screen.onkey(p1lt, "Left")
+    screen.onkey(p1rt, "Right")
+    if pwrUpP1:
+      screen.onkey(p1Pwr, "p")
+      screen.listen()
+    screen.listen()
+    
+
+    
+    #Player 2 controls
+    screen.onkey(p2fd, "w")
+    screen.onkey(p2bd, "s")
+    screen.onkey(p2lt, "a")
+    screen.onkey(p2rt, "d")
+    if pwrUpP2:  
+      screen.onkey(p2Pwr, "Space")
+      screen.listen()
+    screen.listen()
+    
+  
+    
+    redscore += 1
+    if xCoor <= 14:
+      if yCoor <= 14:
+        for i in range(0,3):
+          screen.bgcolor('blue')
+          p1.color("white")
+          time.sleep(0.5)
+          screen.bgcolor('white')
+          p1.color("blue")
+          time.sleep(0.5)
+        rounds += 1  
+        
+    for x, y in theLine:
+      if subtractAndCheck(p2.position(), (x,y)):
+        for i in range(0,3):
+          screen.bgcolor('blue')
+          p1.color("white")
+          time.sleep(0.5)
+          screen.bgcolor('white')
+          p1.color("blue")
+          time.sleep(0.5)
+        rounds += 1
+        break
+      
+    
+        
+  else:
+    
+    
+    #Player 1 controls
+    screen.onkey(p1fd, "Up")
+    screen.onkey(p1bd, "Down")
+    screen.onkey(p1lt, "Left")
+    screen.onkey(p1rt, "Right")
+    if pwrUpP1:
+      screen.onkey(p1Pwr, "p")
+      screen.listen()
+    screen.listen()
+ 
+    
+    #Player 2 controls
+    screen.onkey(p2fd, "w")
+    screen.onkey(p2bd, "s")
+    screen.onkey(p2lt, "a")
+    screen.onkey(p2rt, "d")
+    if pwrUpP2:
+      screen.onkey(p2Pwr, "Space")
+      screen.listen()
+    
+    screen.listen()
+    
+    
+    bluescore += 1
+    if xCoor <= 14:
+      if yCoor <= 14:
+        for i in range(0,3):
+          screen.bgcolor('red')
+          p2.color("white")
+          time.sleep(0.5)
+          screen.bgcolor('white')
+          p2.color("red")
+          time.sleep(0.5)
+        rounds += 1    
+        
+    for x, y in theLine:
+      if subtractAndCheck(p1.position(), (x,y)):
+        for i in range(0,3):
+          screen.bgcolor('red')
+          p2.color("white")
+          time.sleep(0.5)
+          screen.bgcolor('white')
+          p2.color("red")
+          time.sleep(0.5)
+        rounds += 1
+        break
+    
+      
+    
+  red.clear()
+  blue.clear()
+  red.write(" " * 20 + str(redscore), False, 'center', font=('Candara', 18, 'bold'))
+  blue.write(" " * 20 + str(bluescore), False, 'center', font=('Candara', 18, 'bold'))
+
+  
+  
+  
+  if rounds == 5:
+    if bluescore > redscore:
+      bigWriter.color("blue")
+      bigWriter.write("Blue Wins!", False, 'center', font=('Candara', 30, 'bold'))
+      game = False
+    
+  
+  if rounds == 5:
+    if redscore > bluescore:
+      bigWriter.color("red")
+      bigWriter.write("Red Wins!", False, 'center', font=('Candara', 30, 'bold'))
+      game = False    
+  
