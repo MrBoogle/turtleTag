@@ -6,9 +6,11 @@ It's the first game I've ever made. I used the turtle library in Python to draw 
 Obviously I've moved on to working on better things now, but as of 2018, this game has 2 modes, single player and multiplayer. The single player mode uses a prmitive AI I made to play against the player. Their is also a Rules screen, which explains the rules and controls to the players.
 
 # Controls
-_Player 1_
+**Player 1**
+
 Arrow keys for movement, P for power up
 
 
-_Player 2_
+**Player 2**
+
 WASD for movement, Spacebar for powerup
