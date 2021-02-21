@@ -14,3 +14,7 @@ Arrow keys for movement, P for power up
 **Player 2**
 
 WASD for movement, Spacebar for powerup
+
+**Rules**
+
+Two turtles play tag. The border of the game area indicates who's it (If it's red, red is it, if it's blue, blue is it). The main purpose of the game is to not get caught by the other player. You can teleport through walls (if you go through the left wall, you'll come back through the right wall). You can also collect powerups by collecting the orange circles. If you're it, the power up allows you to draw a line to trap the person you're catching. If you're not it, the powerup allows you to teleport to a random location (which can help you get away from the person chasing you). 
